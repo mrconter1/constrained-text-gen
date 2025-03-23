@@ -101,6 +101,9 @@ def main():
     # Number of sentences to request in each LLM call
     sentences_per_request = 3
     
+    # Maximum number of attempts to generate sentences
+    MAX_ATTEMPTS = 10
+    
     # Example constraints
     constraints = {
         "word_count": 5,
@@ -114,10 +117,9 @@ def main():
     # Try to generate the requested number of valid sentences
     valid_sentences = []
     attempts = 0
-    max_attempts = (total_sentences_needed // sentences_per_request) + 5  # Allow some extra attempts
     
     print("Generating sentences...")
-    while len(valid_sentences) < total_sentences_needed and attempts < max_attempts:
+    while len(valid_sentences) < total_sentences_needed and attempts < MAX_ATTEMPTS:
         attempts += 1
         
         # Generate text using the LLM interface
@@ -166,7 +168,7 @@ def main():
     
     # Report if couldn't generate enough sentences
     if len(valid_sentences) < total_sentences_needed:
-        print(f"\nWarning: Could only generate {len(valid_sentences)} valid sentences after {max_attempts} attempts.")
+        print(f"\nWarning: Could only generate {len(valid_sentences)} valid sentences after {MAX_ATTEMPTS} attempts.")
 
 if __name__ == "__main__":
     main() 
