@@ -14,8 +14,20 @@ def check_constraints(text, constraints):
     results = {}
     all_satisfied = True
     
-    # Check word count constraint if specified
-    if "word_count" in constraints:
+    # Check word count range constraint if specified
+    if "word_count_range" in constraints:
+        word_count = len(text.split())
+        min_words, max_words = constraints["word_count_range"]
+        satisfied = min_words <= word_count <= max_words
+        results["word_count_range"] = {
+            "target_range": constraints["word_count_range"],
+            "actual": word_count,
+            "satisfied": satisfied
+        }
+        all_satisfied = all_satisfied and satisfied
+    
+    # Check word count constraint (legacy/exact) if specified
+    elif "word_count" in constraints:
         word_count = len(text.split())
         satisfied = word_count == constraints["word_count"]
         results["word_count"] = {
@@ -106,7 +118,7 @@ def main():
     
     # Example constraints
     constraints = {
-        "word_count": 5,
+        "word_count_range": [4, 6],  # Accept sentences with 4-6 words
         "allowed_chars": "abcdefghijklmnopqrstuvwxyz "
     }
     
